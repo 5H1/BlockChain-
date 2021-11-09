@@ -29,6 +29,13 @@ describe('Testing', ()=>{
         assert.ok(contrct.options.address);
     });
 
+    //testing Constructor
+    it('Constructor check', async()=>{
+        // console.log(contrct);
+        const cid = await contrct.methods.centerId().call();
+        assert.equal(cid, 123);
+    });
+
     //To test CheckQuality function
     it('Quality Checking Function', async ()=>{
         const value = await contrct.methods.checkQuality().call();
