@@ -4,7 +4,7 @@ const fs = require('fs');
 const solc = require('solc')
 
 //building path to our contract file
-const contrPath = path.resolve(__dirname, 'contracts', 'demo.sol');
+const contrPath = path.resolve(__dirname, 'contracts', 'MilkCollectionCenter.sol');
 
 //reading source code from file
 const source = fs.readFileSync(contrPath, 'utf8');
@@ -13,7 +13,7 @@ const source = fs.readFileSync(contrPath, 'utf8');
 const input = {
     language: "Solidity",
     sources: {
-        "demo.sol": {
+        "MilkCollectionCenter.sol": {
             content: source,
         },
     },
@@ -30,10 +30,10 @@ const input = {
 // console.log(JSON.parse(solc.compile(JSON.stringify(input))).contracts['demo.sol']);
 var output=JSON.parse(solc.compile(JSON.stringify(input)));
 
-const interface = output.contracts['demo.sol'].Test.abi;
-const bytecode = output.contracts['demo.sol'].Test.evm.bytecode.object;
+const interface = output.contracts['MilkCollectionCenter.sol'].MilkCollectionCenter.abi;
+const bytecode = output.contracts['MilkCollectionCenter.sol'].MilkCollectionCenter.evm.bytecode.object;
 
-// print(interface)
+// console.log(interface)
 module.exports = {
     interface,
     bytecode,

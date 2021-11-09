@@ -19,7 +19,7 @@ beforeEach(async ()=>{
     }); */
 
     accounts = await web3.eth.getAccounts();
-    contrct=await new web3.eth.Contract(interface).deploy({data:bytecode, arguments:[5]}).send({from : accounts[0], gas:'1000000'});
+    contrct=await new web3.eth.Contract(interface).deploy({data:bytecode, arguments:[123]}).send({from : accounts[0], gas:'1000000'});
 });
 
 describe('Testing', ()=>{
@@ -29,16 +29,24 @@ describe('Testing', ()=>{
         assert.ok(contrct.options.address);
     });
 
-    //To test the default value (constructor)
-    it('Value assigned', async ()=>{
-        const value = await contrct.methods.data().call();
+    //To test CheckQuality function
+    it('Quality Checking Function', async ()=>{
+        const value = await contrct.methods.checkQuality().call();
         assert.equal(value, 5);
     });
 
-    //To test setData function
-    it('setData Fuction', async () =>{
-        await contrct.methods.setData(8).send({from : accounts[0]});
-        const value = await contrct.methods.data().call();
-        assert.equal(value, 8);
+    //To test addMilk function
+    it('Adding Milk', async ()=>{
+        await contrct.methods.addMilk(1,25).send({from : accounts[0], gas:'1000000'});
+        const value = await contrct.methods.getTotalQuantity().call();
+        assert.equal(value, 25);
+    });
+
+    //To test getDatabyId function
+    it('Getting data by Id', async ()=>{
+        await contrct.methods.addMilk(1,25).send({from : accounts[0], gas:'1000000'});
+        const val=await contrct.methods.getDataByID(1).call();
+        // console.log(val);
+        assert.equal(val[0], 25);
     });
 });
