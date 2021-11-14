@@ -1,32 +1,62 @@
 pragma solidity ^0.8.0;
 
 contract MilkCollectionCenter {
-    int256 private totalMilk;
+    uint256 private totalMilk;
     // int private farmerId;
-    int256 public centerId;
-    int256 private quality;
-    mapping(int256 => int256[]) private data;
+    uint256 public centerId;
+    uint256 private quality;
+    mapping(uint256 => uint256[]) private data;
+    string private result = "";
+    uint private time;
 
-    constructor(int256 _centerId) {
+    constructor(uint256 _centerId) {
         centerId = _centerId;
     }
 
-    function checkQuality() public pure returns (int256) {
+    function checkQuality() public pure returns (uint256) {
         return 5;
     }
 
-    function addMilk(int256 _farmerId, int256 _quantity) public {
+    function addMilk(uint256 _farmerId, uint256 _quantity) public {
         quality = checkQuality();
         require(quality == 5);
         totalMilk += _quantity;
         data[_farmerId].push(_quantity);
     }
 
-    function getDataByID(int256 _farmerId) public view returns (int256[] memory){
+    function getDataByID(uint256 _farmerId) public view returns (uint256[] memory){
         return data[_farmerId];
     }
 
-    function getTotalQuantity() public view returns (int256) {
+    function getTotalQuantity() public view returns (uint256) {
         return totalMilk;
+    }
+
+    function uint2str(uint256 _i) internal pure returns (string memory _uintAsString){
+        if (_i == 0) {
+            return "0";
+        }
+        uint256 j = _i;
+        uint256 len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint256 k = len;
+        while (_i != 0) {
+            k = k - 1;
+            uint8 temp = (48 + uint8(_i - (_i / 10) * 10));
+            bytes1 b1 = bytes1(temp);
+            bstr[k] = b1;
+            _i /= 10;
+        }
+        return string(bstr);
+    }
+
+    function exportMilk() public returns (string memory) {
+        time=block.timestamp;
+        result = string(abi.encodePacked("Total Quantity : ",uint2str(totalMilk), "  Time : ", uint2str(time)));
+        return result;
     }
 }
