@@ -56,4 +56,10 @@ describe('Testing', ()=>{
         // console.log(val);
         assert.equal(val[0], 25);
     });
+
+    it('resetting milk quantity', async () =>{
+        await contrct.methods.setMilkZero().send({from : accounts[0], gas:'1000000'});
+        const val=await contrct.methods.getTotalQuantity().call();
+        assert.equal(val, 0);
+    });
 });

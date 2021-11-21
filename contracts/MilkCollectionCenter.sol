@@ -5,7 +5,7 @@ contract MilkCollectionCenter {
     // int private farmerId;
     uint256 public centerId;
     uint256 private quality;
-    mapping(uint256 => uint256[]) private data;
+    mapping(uint256 => uint256[2][]) private data;
     string private result = "";
     uint private time;
 
@@ -21,10 +21,10 @@ contract MilkCollectionCenter {
         quality = checkQuality();
         require(quality == 5);
         totalMilk += _quantity;
-        data[_farmerId].push(_quantity);
+        data[_farmerId].push([block.timestamp,_quantity]);
     }
 
-    function getDataByID(uint256 _farmerId) public view returns (uint256[] memory){
+    function getDataByID(uint256 _farmerId) public view returns (uint256[2][] memory){
         return data[_farmerId];
     }
 
@@ -53,10 +53,13 @@ contract MilkCollectionCenter {
         }
         return string(bstr);
     }
+    function setMilkZero() public {
+        totalMilk = 0;
+    }
 
     function exportMilk() public returns (string memory) {
         time=block.timestamp;
-        result = string(abi.encodePacked("Total Quantity : ",uint2str(totalMilk), "  Time : ", uint2str(time)));
+        result = string(abi.encodePacked("Center Id : ", uint2str(centerId), " Total Quantity : ",uint2str(totalMilk), "  Time : ", uint2str(time)));
         return result;
     }
 }

@@ -33,7 +33,7 @@ var output=JSON.parse(solc.compile(JSON.stringify(input)));
 const interface = output.contracts['MilkCollectionCenter.sol'].MilkCollectionCenter.abi;
 const bytecode = output.contracts['MilkCollectionCenter.sol'].MilkCollectionCenter.evm.bytecode.object;
 
-// console.log(typeof(interface));
+
 module.exports = {
     interface,
     bytecode,
