@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract Exit{
@@ -12,6 +13,10 @@ contract Exit{
         snf= 9;
         fatPercentage= 5;
         return [snf,fatPercentage];
+    }
+
+    function addMilk(uint quant) public {
+        quantity+= quant;
     }
     
     function getTotalQuantity() public view returns (uint256) {
@@ -39,13 +44,15 @@ contract Exit{
         }
         return string(bstr);
     }
+    function setMilktoZero() public {
+        quantity=0;
+    }
     
     function export() public  returns (string memory){
         //time, temp, snf, fatPercentage, 
         time=block.timestamp;
         quality=checkQuality();
-        result = string(abi.encodePacked("SNF : ", uint2str(quality[0]), " Fat Percentage : ",uint2str(quality[1]), " Total Quantity : ",uint2str(quantity), "  Time : ", uint2str(time)));
-        quantity=0;
+        result = string(abi.encodePacked(" Out of Processing "," SNF : ", uint2str(quality[0]), " Fat Percentage : ",uint2str(quality[1]), " Total Quantity : ",uint2str(quantity), "  Time : ", uint2str(time)));
         return result;
     }
 }

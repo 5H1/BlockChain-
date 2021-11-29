@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract MilkCollectionCenter {
@@ -5,7 +6,7 @@ contract MilkCollectionCenter {
     // int private farmerId;
     uint256 public centerId;
     uint256 private quality;
-    mapping(uint256 => uint256[2][]) private data;
+    mapping(uint256 => uint256[3][]) private data;
     string private result = "";
     uint private time;
 
@@ -17,14 +18,14 @@ contract MilkCollectionCenter {
         return 5;
     }
 
-    function addMilk(uint256 _farmerId, uint256 _quantity) public {
+    function addMilk(uint256 _farmerId, uint256 _quantity, uint fatPercent) public {
         quality = checkQuality();
-        require(quality == 5);
+        require(fatPercent == 5);
         totalMilk += _quantity;
-        data[_farmerId].push([block.timestamp,_quantity]);
+        data[_farmerId].push([block.timestamp,_quantity, fatPercent]);
     }
 
-    function getDataByID(uint256 _farmerId) public view returns (uint256[2][] memory){
+    function getDataByID(uint256 _farmerId) public view returns (uint256[3][] memory){
         return data[_farmerId];
     }
 

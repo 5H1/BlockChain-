@@ -1,12 +1,15 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract Entry{
     uint private time;
+    uint private totalQuantity;
     uint private quantity;
     uint private fatPercentage;
     uint private snf;
     uint[] private quality;
     string private result="";
+    string public prevData="Nothing";
     mapping(uint256 => uint256[2][]) private data;
     
     function getDataByCenterID(uint256 centerID) public view returns (uint256[2][] memory){
@@ -18,6 +21,7 @@ contract Entry{
         if(flag){
             quantity += _quantity;
             data[centerID].push([block.timestamp,_quantity]);
+            totalQuantity += _quantity;
         }
     }
     
@@ -34,7 +38,7 @@ contract Entry{
     }
     
     function getTotalQuantity() public view returns (uint256) {
-        return quantity;
+        return totalQuantity;
     }
     
     function uint2str(uint256 _i) internal pure returns (string memory _uintAsString){
@@ -58,18 +62,20 @@ contract Entry{
         }
         return string(bstr);
     }
+    function setPrevData(string memory info) public returns (string memory){
+        prevData = info;
+        return prevData;
+    }
+
+    function setMilktoZero() public {
+        quantity = 0;
+    }
     
     function sendInto() public  returns (string memory){
         //time, temp, snf, fatPercentage, 
         time=block.timestamp;
         quality=checkQuality();
-        result = string(abi.encodePacked("While entering into Processing SNF : ", uint2str(quality[0]), " Fat Percentage : ",uint2str(quality[1]), " Total Quantity : ",uint2str(quantity), " Entry Time : ", uint2str(time)));
+        result = string(abi.encodePacked(prevData, " While entering into Processing SNF : ", uint2str(quality[0]), " Fat Percentage : ",uint2str(quality[1]), " Total Quantity : ",uint2str(quantity), " Entry Time : ", uint2str(time)));
         return result;
-    }
-
-    function outOfProcessing() public returns (string memory){
-        time=block.timestamp;
-        quality=checkQuality();
-        result = string(abi.encodePacked("While Leaving Processing SNF : ", uint2str(quality[0]), " Fat Percentage : ",uint2str(quality[1]), " Total Quantity : ",uint2str(quantity), " Exit Time : ", uint2str(time)));
     }
 }

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
 contract Packing{
@@ -5,6 +6,7 @@ contract Packing{
     uint public noOfPackets;
     uint private time;
     string private res="";
+    string public prevData;
     mapping(uint256 => uint256[2][]) private data;
     
     function addMilk(uint quantity) public{
@@ -42,11 +44,15 @@ contract Packing{
     function getDataById(uint agentID) public view returns (uint[2][] memory){
         return data[agentID];
     }
+
+    function setPrevData(string memory info) public{
+        prevData=info;
+    }
     
     function delivaryTo(uint agentID, uint packets) public returns (string memory){
         time=block.timestamp;
         data[agentID].push([time,packets]);
-        res=string(abi.encodePacked(" Agent ID : ", uint2str(agentID), " No Of Packets : ", uint2str(packets), " Time : ", uint2str(time)));
+        res=string(abi.encodePacked(" Packing : ",prevData," Agent ID : ", uint2str(agentID), " No Of Packets : ", uint2str(packets), " Time : ", uint2str(time)));
         noOfPackets-=packets;
         return res;
     }
